@@ -1,6 +1,6 @@
 <?php
 
-namespace Utyemma\LaraSettings\Models;
+namespace Utyemma\LaraSetting\Models;
 
 use Illuminate\Database\Eloquent\Model;
 

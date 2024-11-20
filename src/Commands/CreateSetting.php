@@ -1,6 +1,6 @@
 <?php
 
-namespace Utyemma\LaraSettings\Commands;
+namespace Utyemma\LaraSetting\Commands;
 
 use Illuminate\Console\GeneratorCommand;
 
@@ -18,7 +18,7 @@ class CreateSetting extends GeneratorCommand
     protected $type = 'Settings';
 
     protected function getStub(){
-        return __DIR__.'../../resources/stubs/settings.stub';
+        return __DIR__.'/../../resources/stubs/settings.stub';
     }
 
     protected function getDefaultNamespace($rootNamespace) {

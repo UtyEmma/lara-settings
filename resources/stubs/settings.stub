@@ -2,15 +2,15 @@
 
 namespace {{namespace}};
 
-use \Utyemma\LaraSettings\Settings;
+use \Utyemma\LaraSetting\Settings;
 
 class {{class}} extends Settings {
 
     /**
-     * Attributes that can be assigned on this setting.
+     * Options that can be assigned on this setting.
      * @var array
      */
-    public $fillable = [];
+    public $options = [];
 
      /**
      * Provides human-readable labels for the settings attributes.

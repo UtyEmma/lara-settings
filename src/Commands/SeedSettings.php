@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Console\Commands;
+namespace Utyemma\LaraSetting\Commands;
 
 use Illuminate\Console\Command;
 
@@ -18,7 +18,7 @@ class SeedSettings extends Command
      *
      * @var string
      */
-    protected $description = 'Seed Default Settings';
+    protected $description = 'Seed the database with the specified settings record';
 
     /**
      * Execute the console command.

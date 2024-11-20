@@ -1,12 +1,12 @@
 <?php
 
-namespace Utyemma\LaraSettings;
+namespace Utyemma\LaraSetting;
 
-use App\Console\Commands\SeedSettings;
 use Illuminate\Support\ServiceProvider;
-use Utyemma\LaraSettings\Commands\CreateSetting;
+use Utyemma\LaraSetting\Commands\CreateSetting;
+use Utyemma\LaraSetting\Commands\SeedSettings;
 
-class LaraNoticeServiceProvider extends ServiceProvider {
+class LaraSettingServiceProvider extends ServiceProvider {
 
     function boot(){
         $this->registerCommands();

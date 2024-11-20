@@ -1,17 +1,17 @@
 <?php
 
-namespace Utyemma\LaraSettings;
+namespace Utyemma\LaraSetting;
 
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Contracts\Support\Jsonable;
 use Illuminate\Database\Eloquent\Collection;
-use Utyemma\LaraSettings\Models\Setting;
+use Utyemma\LaraSetting\Models\Setting;
 
 abstract class Settings implements Arrayable, Jsonable{
 
     protected Setting $model;
 
-    protected $attributes = [];
+    protected $options = [];
     protected $labels = [];
 
     private Collection | null $items = null;
@@ -25,7 +25,7 @@ abstract class Settings implements Arrayable, Jsonable{
     }
 
     function __isset($name){
-        return property_exists($this, $name) || in_array($name, $this->fillable);
+        return property_exists($this, $name) || in_array($name, $this->options);
     }
 
     public function __get($name){

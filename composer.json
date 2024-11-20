@@ -2,7 +2,7 @@
     "name": "utyemma/larasetting",
     "description": "Quick and easy app settings for laravel applications",
     "keywords": ["Lara Setting", "Setting", "Laravel Setting"],
-    "license": "MIT",
+    "license": "MIT", 
     "authors": [
         {
             "name": "Utibe-Abasi Emmanuel",

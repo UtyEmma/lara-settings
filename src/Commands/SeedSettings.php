@@ -11,7 +11,7 @@ class SeedSettings extends Command
      *
      * @var string
      */
-    protected $signature = 'settings:seed {class}';
+    protected $signature = 'settings:seed {--class=}';
 
     /**
      * The console command description.
@@ -24,7 +24,15 @@ class SeedSettings extends Command
      * Execute the console command.
      */
     public function handle() {
-        $class = $this->option('class');
-        app("App\Settings\{$class}")->seed();
+        $class = $this->option('class'); 
+        $className = "App\\Settings\\$class";
+        
+        if(!class_exists($className)) {
+            return $this->error("\n Target setting class $className does not exist. \n");
+        }
+        
+        app($className)->seed();
+        
+        return $this->info("\n $class data seeded successfully. \n");
     }
 }

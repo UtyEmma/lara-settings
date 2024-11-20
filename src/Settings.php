@@ -13,6 +13,10 @@ abstract class Settings implements Arrayable, Jsonable{
 
     protected $options = [];
     protected $labels = [];
+    
+    protected $casts = [];
+
+    protected $attributes = [];
 
     private Collection | null $items = null;
 
@@ -20,7 +24,6 @@ abstract class Settings implements Arrayable, Jsonable{
         $this->model = new Setting;
         $this->attributes = $this->attributes();
         $this->labels = $this->labels();
-        
         $this->load(); 
     }
 
@@ -38,11 +41,11 @@ abstract class Settings implements Arrayable, Jsonable{
     }
 
     function attributes(){
-        return [];
+        return $this->attributes;
     }
 
     function labels(){
-        return [];
+        return $this->labels;
     }
 
     function load() {
@@ -53,7 +56,7 @@ abstract class Settings implements Arrayable, Jsonable{
         return $this->model::where('group', $this::class)->get();
     }
 
-    public function first($key){
+    public function first($key): mixed{
         return $this->model->withCasts($this->casts($key))->whereGroup($this::class)->where('key', $key)->first();
     }
 
@@ -68,7 +71,10 @@ abstract class Settings implements Arrayable, Jsonable{
         ];
         
         $setting = $this->model::where($data)->first( ) ?? new Setting($data);
-        $setting->withCasts($this->casts($key));
+
+        if(count($this->casts)) {
+            $setting->withCasts($this->casts($key));
+        }
 
         $setting->label = array_key_exists($key, $this->labels) ? $this->labels[$key] : null;
         $setting->value = $value;
@@ -84,8 +90,10 @@ abstract class Settings implements Arrayable, Jsonable{
     }
 
     function seed(): void {
-        foreach($this->attributes as $key => $value) {
-            $this->save($key, $value);
+        foreach($this->options as $value) {
+            $item = null;
+            if(isset($this->attributes[$value])) $item = $this->attributes[$value];
+            $this->save($value, $item);
         }
     }
 

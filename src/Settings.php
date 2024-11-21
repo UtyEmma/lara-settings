@@ -32,8 +32,7 @@ abstract class Settings implements Arrayable, Jsonable{
     }
 
     public function __get($name){
-        if(!$this->items) $this->load();
-        return $this->items->firstWhere('key', $name);    
+        return $this->first($name);
     }
 
     function __set($name, $value) {
@@ -42,6 +41,11 @@ abstract class Settings implements Arrayable, Jsonable{
 
     function attributes(){
         return $this->attributes;
+    }
+
+    function fetchFromCache($name){
+        if(!$this->items) $this->load();
+        return $this->items->firstWhere('key', $name); 
     }
 
     function labels(){

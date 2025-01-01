@@ -5,6 +5,7 @@ namespace Utyemma\LaraSetting;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Contracts\Support\Jsonable;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Collection as SupportCollection;
 use Utyemma\LaraSetting\Models\Setting;
 
 abstract class Settings implements Arrayable, Jsonable{
@@ -18,10 +19,13 @@ abstract class Settings implements Arrayable, Jsonable{
 
     protected $attributes = [];
 
+    protected $strict = true;
+
     private Collection | null $items = null;
 
     function __construct(){
         $this->model = new Setting;
+
         $this->attributes = $this->attributes();
         $this->labels = $this->labels();
         $this->load(); 
@@ -60,29 +64,52 @@ abstract class Settings implements Arrayable, Jsonable{
         return $this->model::where('group', $this::class)->get();
     }
 
-    public function first($key): mixed{
-        return $this->model->withCasts($this->casts($key))->whereGroup($this::class)->where('key', $key)->first();
+    public function first($key): mixed {
+        return $this->items->firstWhere('key', $key)?->mergeCasts($this->casts($key));
     }
 
     function casts($key){
         return isset($this->casts[$key]) ? ['value' => $this->casts[$key]] : [];
     }
 
-    private function save($key, $value){
-        $data = [
+    function queryAttribute($key){
+        return [
             'key' => $key,
             'group' => $this::class,
         ];
-        
-        $setting = $this->model::where($data)->first( ) ?? new Setting($data);
+    }
 
-        if(count($this->casts)) {
+    private function save($key, $value){
+        if($this->strict) $this->validateOptions([$key]);
+
+        $data = $this->queryAttribute($key);
+        $setting = $this->model->where($data)->first() ?? new Setting($data, $this->casts);
+
+        if(!empty($this->casts)) {
             $setting->withCasts($this->casts($key));
         }
 
         $setting->label = array_key_exists($key, $this->labels) ? $this->labels[$key] : null;
         $setting->value = $value;
         $setting->save();
+        // Refresh the model items
+        $this->load();
+    }
+
+    function validateOptions($options){
+        if($unique = collect($options)->diff($this->options)->implode(',')) {
+            throw new \Exception("Setting options '{$unique}' are not defined in the options array. Add them or set 'strict' property to false to dynamically set undefined options.");
+        }
+    }
+
+    function update($options = []) {
+        if($this->strict) $this->validateOptions($options);
+
+        collect($options)->each(function($value, $key) {
+            if(isset($this->options[$key])) $this->save($key, $value);
+        });
+
+        return true; 
     }
 
     function toArray(): array {

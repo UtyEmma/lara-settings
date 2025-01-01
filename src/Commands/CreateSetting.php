@@ -11,7 +11,7 @@ class CreateSetting extends GeneratorCommand
      *
      * @var string
      */
-    protected $signature = 'make:setting {name : The name of the mailable class}';
+    protected $signature = 'make:setting {name : The name of the settings class}';
 
     protected $description = 'Create a new Setting Class';
 

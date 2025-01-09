@@ -8,7 +8,7 @@ use Utyemma\LaraSetting\Commands\CreateSetting;
 use Utyemma\LaraSetting\Commands\SeedSettings;
 use Utyemma\LaraSetting\Support\DiscoverClasses;
 
-class LaraSettingServiceProvider extends ServiceProvider implements DeferrableProvider {
+class LaraSettingServiceProvider extends ServiceProvider {
 
     private array $settingClasses = [];
 

@@ -10,7 +10,7 @@ use Utyemma\LaraSetting\Support\DiscoverClasses;
 
 class LaraSettingServiceProvider extends ServiceProvider {
 
-    // private array $settingClasses = [];
+    private array $settingClasses = [];
 
     function boot(){
         $this->registerCommands();
@@ -21,20 +21,20 @@ class LaraSettingServiceProvider extends ServiceProvider {
         ], 'larasettings-migrations');
     }
 
-    // function discover(){
-    //     $namespace = 'App\\Settings'; 
-    //     $directory = app_path('Settings');
+    function discover(){
+        $namespace = 'App\\Settings'; 
+        $directory = app_path('Settings');
 
-    //     $this->settingClasses = (new DiscoverClasses)->find($namespace, $directory);
-    // }
+        $this->settingClasses = (new DiscoverClasses)->find($namespace, $directory);
+    }
 
-    // function register() {
-    //     $this->discover();
-    //     foreach ($this->settingClasses as $key => $className) {
-    //         $this->app->bind($className, fn () => new $className());
-    //         $this->app->singleton($className, fn ($app) => new $className());
-    //     }  
-    // }
+    function register() {
+        $this->discover();
+        foreach ($this->settingClasses as $key => $className) {
+            $this->app->bind($className, fn () => new $className());
+            $this->app->singleton($className, fn ($app) => new $className());
+        }  
+    }
 
     function registerCommands(){
         if($this->app->runningInConsole()){
@@ -44,10 +44,5 @@ class LaraSettingServiceProvider extends ServiceProvider {
             ]);
         }
     }
-
-    // function provides(){
-    //     $this->discover();
-    //     return $this->settingClasses;
-    // }
 
 }

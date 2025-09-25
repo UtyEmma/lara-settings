@@ -2,7 +2,6 @@
 
 namespace Utyemma\LaraSetting;
 
-use Illuminate\Contracts\Support\DeferrableProvider;
 use Illuminate\Support\ServiceProvider;
 use Utyemma\LaraSetting\Commands\CreateSetting;
 use Utyemma\LaraSetting\Commands\SeedSettings;

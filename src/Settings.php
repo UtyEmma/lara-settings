@@ -61,7 +61,8 @@ abstract class Settings implements Arrayable, Jsonable{
     }
 
     private function get(){
-        return $this->model::where('group', $this::class)->get();
+        return $this->model::where('group', $this::class)->get()
+                    ->map(fn($item) => $item->mergeCasts($this->casts($item->key)));
     }
 
     public function first($key): mixed {
@@ -104,16 +105,15 @@ abstract class Settings implements Arrayable, Jsonable{
 
     function update($options = []) {
         if($this->strict) $this->validateOptions($options);
-
         collect($options)->each(function($value, $key) {
-            if(isset($this->options[$key])) $this->save($key, $value);
+            if(in_array($key, $this->options)) $this->save($key, $value);
         });
 
         return true; 
     }
 
     function toArray(): array {
-        return $this->get()->pluck('key', 'value')->toArray();
+        return $this->get()->pluck('value', 'key')->toArray();
     }
 
     function toJson($options = 0){
